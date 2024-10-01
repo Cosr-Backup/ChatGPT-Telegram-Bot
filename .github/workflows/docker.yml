@@ -6,11 +6,6 @@ on:
     types: [closed]
     branches:
       - main
-  paths:
-    - Dockerfile.build
-    - requirements.txt
-    - setup.sh
-    - .github/workflows/docker.yml
 
 jobs:
   build-and-push:

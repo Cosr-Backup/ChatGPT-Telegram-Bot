@@ -23,6 +23,7 @@ from config import (
     PREFERENCES,
     LANGUAGES,
     PLUGINS,
+    RESET_TIME,
     get_robot,
     reset_ENGINE,
     get_current_lang,
@@ -39,7 +40,8 @@ from utils.scripts import GetMesageInfo, safe_get, is_emoji
 
 from telegram.constants import ChatAction
 from telegram import BotCommand, InlineKeyboardMarkup, InlineQueryResultArticle, InputTextMessageContent, Update, ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove
-from telegram.ext import CommandHandler, MessageHandler, ApplicationBuilder, filters, CallbackQueryHandler, Application, AIORateLimiter, InlineQueryHandler
+from telegram.ext import CommandHandler, MessageHandler, ApplicationBuilder, filters, CallbackQueryHandler, Application, AIORateLimiter, InlineQueryHandler, ContextTypes
+from datetime import timedelta
 
 import asyncio
 lock = asyncio.Lock()
@@ -100,6 +102,18 @@ async def command_bot(update, context, language=None, prompt=translator_prompt, 
         if message:
             if len(message) == 1 and is_emoji(message):
                 return
+
+            if pass_history >= 3:
+                # 移除已存在的任务（如果有）
+                remove_job_if_exists(convo_id, context)
+                # 添加新的定时任务
+                context.job_queue.run_once(
+                    scheduled_function,
+                    when=timedelta(seconds=RESET_TIME),
+                    chat_id=chatid,
+                    name=convo_id
+                )
+
             bot_info = await context.bot.get_me(read_timeout=time_out, write_timeout=time_out, connect_timeout=time_out, pool_timeout=time_out)
             message_has_nick = False
             botNick = config.NICK.lower() if config.NICK else None
@@ -110,12 +124,12 @@ async def command_bot(update, context, language=None, prompt=translator_prompt, 
             and update_message.from_user.is_bot == False \
             and (update_message.reply_to_message.from_user.username == bot_info.username or message_has_nick):
                 if update_message.reply_to_message.from_user.is_bot and Users.get_config(convo_id, "TITLE") == True:
-                    message = '\n'.join(reply_to_message_text.split('\n')[1:]) + "\n" + message
+                    message = message + "\n" + '\n'.join(reply_to_message_text.split('\n')[1:])
                 else:
                     if reply_to_message_text:
-                        message = reply_to_message_text + "\n" + message
+                        message = message + "\n" + reply_to_message_text
                     if reply_to_message_file_content:
-                        message = reply_to_message_file_content + "\n" + message
+                        message = message + "\n" + reply_to_message_file_content
             elif update_message.reply_to_message and update_message.reply_to_message.from_user.is_bot \
             and update_message.reply_to_message.from_user.username != bot_info.username:
                 return
@@ -590,6 +604,28 @@ async def inlinequery(update: Update, context) -> None:
 
         await update.inline_query.answer(results)
 
+async def scheduled_function(context: ContextTypes.DEFAULT_TYPE) -> None:
+    """这个函数将在RESET_TIME秒后执行一次，重置特定用户的对话"""
+    job = context.job
+    chat_id = job.chat_id
+
+    if config.ADMIN_LIST and chat_id in config.ADMIN_LIST:
+        return
+
+    reset_ENGINE(chat_id)
+
+    # 任务执行完毕后自动移除
+    remove_job_if_exists(str(chat_id), context)
+
+def remove_job_if_exists(name: str, context: ContextTypes.DEFAULT_TYPE) -> bool:
+    """如果存在，则移除指定名称的任务"""
+    current_jobs = context.job_queue.get_jobs_by_name(name)
+    if not current_jobs:
+        return False
+    for job in current_jobs:
+        job.schedule_removal()
+    return True
+
 # 定义一个全局变量来存储 chatid
 target_convo_id = None
 reset_mess_id = 9999
@@ -637,6 +673,8 @@ async def info(update, context):
     await delete_message(update, context, [message.message_id, user_message_id])
 
 @decorators.PrintMessage
+@decorators.GroupAuthorization
+@decorators.Authorization
 async def start(update, context): # 当用户输入/start时，返回文本
     _, _, _, _, _, _, _, _, convo_id, _, _, _ = await GetMesageInfo(update, context)
     user = update.effective_user
@@ -666,6 +704,20 @@ async def start(update, context): # 当用户输入/start时，返回文本
         # if GET_MODELS:
         #     update_initial_model()
 
+    # message = (
+    #     ">Block quotation started\n"
+    #     ">Block quotation continued\n"
+    #     ">Block quotation continued\n"
+    #     ">Block quotation continued\n"
+    #     ">The last line of the block quotation\n"
+    #     "**>The expandable block quotation started right after the previous block quotation\n"
+    #     ">It is separated from the previous block quotation by an empty bold entity\n"
+    #     ">Expandable block quotation continued\n"
+    #     ">Hidden by default part of the expandable block quotation started\n"
+    #     ">Expandable block quotation continued\n"
+    #     ">The last line of the expandable block quotation with the expandability mark||\n"
+    # )
+    # await update.message.reply_text(message, parse_mode='MarkdownV2', disable_web_page_preview=True)
     await update.message.reply_text(escape(message, italic=False), parse_mode='MarkdownV2', disable_web_page_preview=True)
 
 async def error(update, context):

@@ -14,6 +14,9 @@ from telegram import InlineKeyboardButton
 NICK = os.environ.get('NICK', None)
 PORT = int(os.environ.get('PORT', '8080'))
 BOT_TOKEN = os.environ.get('BOT_TOKEN', None)
+RESET_TIME = int(os.environ.get('RESET_TIME', '3600'))
+if RESET_TIME < 60:
+    RESET_TIME = 60
 
 GPT_ENGINE = os.environ.get('GPT_ENGINE', 'gpt-4o')
 API_URL = os.environ.get('API_URL', 'https://api.openai.com/v1/chat/completions')
@@ -219,6 +222,9 @@ class UserConfig:
                     if key == "api_key" and value != self.api_key:
                         self.users[user_id]["api_key"] = self.api_key
                         update_user_config(user_id, "api_key", self.api_key)
+                    if user_id == "global" and key == "systemprompt" and value != self.systemprompt:
+                        self.users[user_id]["systemprompt"] = self.systemprompt
+                        update_user_config(user_id, "systemprompt", self.systemprompt)
 
     def get_init_preferences(self):
         return {
@@ -523,7 +529,7 @@ initial_model = [
     "o1-mini",
     "o1-preview",
     "claude-3-opus-20240229",
-    "claude-3-5-sonnet-20240620",
+    "claude-3-5-sonnet-20241022",
     # "gpt-4-turbo-2024-04-09",
     # "gpt-3.5-turbo",
     # "claude-3-haiku-20240307",

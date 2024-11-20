@@ -49,7 +49,7 @@ The following is a list of environment variables related to the bot's core setti
 | API_URL | If you are using the OpenAI official API, you don't need to set this. If you using a third-party API, you need to fill in the third-party proxy website. The default is: https://api.openai.com/v1/chat/completions | No |
 | GROQ_API_KEY | Groq official API key. | No |
 | GOOGLE_AI_API_KEY | Google AI official API key. Use this environment variable to access the Gemini series models, including Gemini 1.5 pro and Gemini 1.5 flash.| No |
-| VERTEX_PRIVATE_KEY | Description: The private key for the Google Cloud Vertex AI service account. Format: A JSON string containing the service account's private key information. How to obtain: Create a service account in the Google Cloud Console, generate a JSON key file, and set its contents as the value for this environment variable. | No |
+| VERTEX_PRIVATE_KEY | Description: Private key for Google Cloud Vertex AI service account. Format: The value of the private_key field inside the JSON string containing the service account private key information, please use double quotes to enclose the private key. How to obtain: Create a service account in the Google Cloud Console, generate a JSON key file, and set the value of the private_key field inside its content, enclosed in double quotes, as the value of this environment variable. | No |
 | VERTEX_PROJECT_ID | Description: Your Google Cloud project ID. Format: A string, typically composed of lowercase letters, numbers, and hyphens. How to obtain: You can find your project ID in the project selector of the Google Cloud Console. | No |
 | VERTEX_CLIENT_EMAIL | Description: The email address of the Google Cloud Vertex AI service account. Format: Usually a string in the form of "service-account-name@developer.gserviceaccount.com". How to obtain: Generated when creating the service account, or can be viewed in the service account details under the "IAM & Admin" section of the Google Cloud Console. | No |
 | claude_api_key | Claude official API key. | No |
@@ -97,11 +97,23 @@ The following is a list of environment variables related to the bot's plugin set
 
 ## Koyeb Remote Deployment
 
-One-click deployment:
+There are two ways to deploy on Koyeb, one is to use the one-click deployment with the Docker image provided by Koyeb, and the other is to import this repository for deployment. Both methods are free. The first method is simple to deploy but cannot update automatically, while the second method is slightly more complex but can update automatically.
+
+### One-click deployment
+
+Click the button below to automatically deploy using the pre-built Docker image with one click:
 
 [![Deploy to Koyeb](https://www.koyeb.com/static/images/deploy/button.svg)](https://app.koyeb.com/deploy?type=docker&image=docker.io/yym68686/chatgpt:latest&name=chatbot)
 
-When deploying with Koyeb, you must add the environment variable `WEB_HOOK`, otherwise the bot will not be able to receive messages. Use a string like `https://appname.koyeb.app` as the value for `WEB_HOOK`, Koyeb will automatically assign a subdomain.
+⚠️ Note: When deploying with Koyeb, you must add the environment variable `WEB_HOOK`, otherwise the bot will not be able to receive messages. Use a string like `https://appname.koyeb.app` as the value for `WEB_HOOK`, Koyeb will automatically assign a subdomain.
+
+### Repository deployment
+
+1. Fork this repository [Click to fork this repository](https://github.com/yym68686/ChatGPT-Telegram-Bot/fork)
+
+2. When deploying, you need to choose the repository method, set `Run command` to `python3 bot.poy`, and set `Exposed ports` to `8080`.
+
+3. [Install pull](https://github.com/apps/pull) to automatically sync this repository.
 
 ## Zeabur Remote Deployment
 

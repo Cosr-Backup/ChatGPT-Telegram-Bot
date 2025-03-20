@@ -8,8 +8,7 @@ import utils.decorators as decorators
 from md2tgmd.src.md2tgmd import escape, split_code, replace_all
 from ModelMerge.src.ModelMerge.utils.prompt import translator_en2zh_prompt, translator_prompt
 from ModelMerge.src.ModelMerge.utils.scripts import Document_extract, claude_replace
-from ModelMerge.src.ModelMerge.core.utils import get_engine
-from ModelMerge.src.ModelMerge.core.request import get_image_message, get_text_message
+from ModelMerge.src.ModelMerge.core.utils import get_engine, get_image_message, get_text_message
 import config
 from config import (
     WEB_HOOK,
@@ -194,7 +193,7 @@ async def command_bot(update, context, language=None, prompt=translator_prompt, 
                 message = message_list
             elif file_url:
                 image_url = file_url
-                message = Document_extract(file_url, image_url, engine) + message
+                message = await Document_extract(file_url, image_url, engine) + message
 
             await getChatGPT(update_message, context, title, robot, message, chatid, messageid, convo_id, message_thread_id, pass_history, api_key, api_url, engine)
     else:
@@ -604,7 +603,7 @@ async def handle_file(update, context):
             return
     if image_url == None and file_url:
         image_url = file_url
-    message = Document_extract(file_url, image_url, engine)
+    message = await Document_extract(file_url, image_url, engine)
 
     robot.add_to_conversation(message, role, convo_id)
 

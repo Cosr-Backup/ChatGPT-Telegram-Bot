@@ -27,7 +27,7 @@ def Authorization(func):
             return
         if config.whitelist == None or (config.GROUP_LIST and chatid in config.GROUP_LIST):
             return await func(*args, **kwargs)
-        if config.whitelist and str(update.effective_user.id) not in config.whitelist:
+        if config.whitelist and update.effective_user and str(update.effective_user.id) not in config.whitelist:
             message = ban_message(update, convo_id)
             await context.bot.send_message(chat_id=chatid, message_thread_id=message_thread_id, text=message, parse_mode='MarkdownV2')
             return
@@ -74,12 +74,11 @@ def APICheck(func):
             Users,
             get_robot,
             get_current_lang,
-            CLAUDE_API,
         )
         from md2tgmd.src.md2tgmd import escape
         from utils.i18n import strings
         robot, role, api_key, api_url = get_robot(convo_id)
-        if robot == None or (api_key == None and CLAUDE_API == None):
+        if robot == None:
             await context.bot.send_message(
                 chat_id=chatid,
                 message_thread_id=message_thread_id,

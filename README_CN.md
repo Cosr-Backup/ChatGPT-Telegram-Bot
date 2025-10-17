@@ -18,13 +18,13 @@
   </a>
 </p>
 
-ChatGPT Telegram 机器人是一个强大的 Telegram 机器人，可以使用多种主流的大语言模型 API，包括 GPT-3.5/4/4 Turbo/4o/o1，DALL·E 3，Claude2.1/3/3.5 API，Gemini 1.5 Pro/Flash，Vertex AI（Claude系列/Gemini系列），Groq Mixtral-8x7b/LLaMA2-70b 和 DuckDuckGo(gpt-4o-mini, claude-3-haiku, Meta-Llama-3.1-70B, Mixtral-8x7B)。它使用户能够在 Telegram 上进行高效的对话和信息搜索。
+ChatGPT Telegram 机器人是一个强大的 Telegram 机器人，支持兼容 OpenAI 格式的大语言模型 API。它使用户能够在 Telegram 上进行高效的对话和信息搜索。对于 Anthropic, Gemini, Vertex AI, Azure, AWS, xai, Cohere, Groq, Cloudflare, OpenRouter 等其他提供商的模型的支持，请使用我的另一个项目 [uni-api](https://github.com/yym68686/uni-api) 进行集成，以减少维护成本，感谢您的理解。
 
 ## ✨ 功能
 
-- **多种AI模型**：支持GPT-3.5/4/4 Turbo/4o/o1，DALL·E 3，Claude2.1/3/3.5 API，Gemini 1.5 Pro/Flash，Vertex AI（Claude系列/Gemini系列），Groq Mixtral-8x7b/LLaMA2-70b 和 DuckDuckGo(gpt-4o-mini, claude-3-haiku, Meta-Llama-3.1-70B, Mixtral-8x7B)。还支持 one-api/new-api/[uni-api](https://github.com/yym68686/uni-api)。利用自研 API 请求后端 [SDK](https://github.com/yym68686/ModelMerge)，不依赖 OpenAI SDK。
+- **多种AI模型**：支持兼容 OpenAI 格式的 API。对于 Anthropic, Gemini, Vertex AI, Azure, AWS, xai, Cohere, Groq, Cloudflare, OpenRouter 等其他提供商的模型，请使用 [uni-api](https://github.com/yym68686/uni-api) 进行集成。同时支持 one-api/new-api。利用自研 API 请求后端 [SDK](https://github.com/yym68686/aient)，不依赖 OpenAI SDK。
 - **多模态问答**：支持语音、音频、图像和 PDF/TXT/MD/python 文档的问答。用户可以直接在聊天框中上传文件使用。
-- **群聊主题模式**：支持在群聊中启用主题模式，在主题之间隔离API、对话历史、插件配置和偏好设置。
+- **群聊主题模式**: 支持在群聊中启用主题模式，在主题之间隔离API、对话历史、插件配置和偏好设置。
 - **丰富的插件系统**：支持网页搜索（DuckDuckGo和Google）、URL 总结、ArXiv 论文总结和代码解释器。
 - **用户友好界面**：允许在聊天窗口内灵活切换模型，并支持类似打字机效果的流式输出。支持精确的 Markdown 消息渲染，利用了我的另一个[项目](https://github.com/yym68686/md2tgmd)。
 - **高效消息处理**：异步处理消息，多线程回答问题，支持隔离对话，并为不同用户提供独特对话。
@@ -35,6 +35,7 @@ ChatGPT Telegram 机器人是一个强大的 Telegram 机器人，可以使用�
 - **白名单、黑名单和管理员设置**：支持设置白名单、黑名单和管理员。
 - **内联模式**：允许用户在任何聊天窗口中 @ 机器人以生成答案，而无需在机器人的聊天窗口中提问。
 - **方便部署**：支持一键部署到 koyeb、Zeabur、Replit，真正零成本和傻瓜式部署流程。还支持 kuma 防休眠，以及 Docker 和 fly.io 部署。
+- **模型分组系统**: 将AI模型组织成逻辑组，便于选择。模型可以按提供商（GPT、Claude等）或按功能进行分组。没有明确指定组的模型会自动放入"OTHERS"组。这使得模型选择更直观，特别是当有很多模型可用时。
 
 ## 🍃 环境变量
 
@@ -43,17 +44,10 @@ ChatGPT Telegram 机器人是一个强大的 Telegram 机器人，可以使用�
 | 变量名称 | 描述 | 是否必需? |
 |---------------|-------------|-----------|
 | BOT_TOKEN | Telegram 机器人令牌。 在 [BotFather](https://t.me/BotFather) 上创建一个机器人以获取 BOT_TOKEN。 | **是** |
-| API | OpenAI 或第三方 API 密钥。 | 否 |
-| GPT_ENGINE | 设置默认的QA模型；默认是：`gpt-4o`。此项可以使用机器人的“info”命令自由切换，原则上不需要设置。 | 否 |
+| API_KEY | OpenAI 或第三方 API 密钥。 | 是 |
+| MODEL | 设置默认的QA模型；默认是：`gpt-5`。此项可以使用机器人的"info"命令自由切换，原则上不需要设置。 | 否 |
 | WEB_HOOK | 每当电报机器人收到用户消息时，消息将被传递到 WEB_HOOK，机器人将在此监听并及时处理收到的消息。 | 否 |
-| API_URL | 如果您使用的是OpenAI官方API，则无需设置此项。如果您使用的是第三方API，则需要填写第三方代理网站。默认值是：https://api.openai.com/v1/chat/completions | 否 |
-| GROQ_API_KEY | Groq官方API密钥。 | 否 |
-| GOOGLE_AI_API_KEY | Google AI 官方 API 密钥。使用此环境变量访问 Gemini 系列模型，包括 Gemini 1.5 pro 和 Gemini 1.5 flash。| 否 |
-| VERTEX_PRIVATE_KEY | 描述: Google Cloud Vertex AI 服务账户的私钥。格式: 包含服务账户私钥信息的 JSON 字符串里面的 private_key 字段的值，请使用双引号包裹私钥。如何获取: 在 Google Cloud 控制台中创建一个服务账户，生成一个 JSON 密钥文件，并将其内容里面的 private_key 字段的值使用双引号包裹后设置为此环境变量的值。 | 否 |
-| VERTEX_PROJECT_ID | 描述：您的 Google Cloud 项目 ID。格式：一个字符串，通常由小写字母、数字和连字符组成。如何获取：您可以在 Google Cloud 控制台的项目选择器中找到您的项目 ID。 | 否 |
-| VERTEX_CLIENT_EMAIL | 描述：Google Cloud Vertex AI 服务账户的电子邮件地址。格式：通常是 "service-account-name@developer.gserviceaccount.com" 形式的字符串。获取方式：在创建服务账户时生成，或可以在 Google Cloud 控制台的 "IAM & 管理" 部分的服务账户详细信息中查看。 | 否 |
-| claude_api_key | Claude 官方 API 密钥。 | 否 |
-| CLAUDE_API_URL | 如果您使用的是Anthropic官方API，则无需设置此项。如果您使用的是第三方Anthropic API，则需要填写第三方代理网站。默认值是：https://api.anthropic.com/v1/messages | 否 |
+| BASE_URL | 如果您使用的是OpenAI官方API，则无需设置此项。如果您使用的是第三方API，则需要填写第三方代理网站。默认值是：https://api.openai.com/v1/chat/completions | 否 |
 | NICK | 默认是空的，NICK 是机器人的名字。机器人只会在用户输入的消息以 NICK 开头时才会响应，否则机器人会响应任何消息。特别是在群聊中，如果没有 NICK，机器人会回复所有消息。 | 否 |
 | GOOGLE_API_KEY | 如果你需要使用谷歌搜索，你需要设置它。如果你不设置这个环境变量，机器人将默认提供duckduckgo搜索。 | No |
 | GOOGLE_CSE_ID | 如果你需要使用谷歌搜索，你需要和 GOOGLE_API_KEY 一起设置。 | 否 |
@@ -61,7 +55,7 @@ ChatGPT Telegram 机器人是一个强大的 Telegram 机器人，可以使用�
 | BLACK_LIST | 设置哪些用户禁止访问机器人，并用 ',' 连接被授权使用机器人的用户ID。默认值是 `None` | 否 |
 | ADMIN_LIST | 设置管理员列表。只有管理员可以使用 `/info` 命令配置机器人。 | 否 |
 | GROUP_LIST | 设置可以使用机器人的群组列表。使用逗号（'，'）连接群组ID。即使群组成员不在白名单中，只要群组ID在GROUP_LIST中，群组的所有成员都可以使用机器人。 | 否 |
-| CUSTOM_MODELS | 设置自定义模型名称列表。使用逗号（','）连接模型名称。如果需要删除默认模型，请在默认模型名称前添加连字符（-）。如果要删除所有默认模型，请使用 `-all`。 | 否 |
+| CUSTOM_MODELS | 设置自定义模型名称列表。使用逗号（','）连接模型名称。如果需要删除默认模型，请在默认模型名称前添加连字符（-）。如果要删除所有默认模型，请使用 `-all`。要创建模型组，使用分号（';'）分隔组，使用冒号（':'）定义组名及其模型，例如：`CUSTOM_MODELS=-all,command,grok-2;GPT:gpt-5,gpt-3.5-turbo;Claude:claude-3-opus,claude-3-sonnet;OTHERS`。没有特定组的模型将自动放入"OTHERS"组。 | 否 |
 | CHAT_MODE | 引入多用户模式，不同用户的配置不共享。当 CHAT_MODE 为 `global` 时，所有用户共享配置。当 CHAT_MODE 为 `multiusers` 时，用户配置彼此独立。 | 否 |
 | temperature | 指定 LLM 的温度。默认值是 `0.5`。 | 否 |
 | GET_MODELS | 指定是否通过 API 获取支持的模型。默认值为 `False`。 | 否 |
@@ -81,19 +75,20 @@ ChatGPT Telegram 机器人是一个强大的 Telegram 机器人，可以使用�
 | FILE_UPLOAD_MESS | 当文件或图像上传成功并且机器人处理完成时，机器人将发送一条消息，提示上传成功。默认值为 `True`。对应于偏好设置里面的名为 `文件上传成功提示消息` 的按钮。 | 否 |
 | FOLLOW_UP | 自动生成多个相关问题供用户选择。默认值为 `False`。对应于偏好设置里面的名为 `猜你想问` 的按钮。 | 否 |
 | TITLE | 是否在机器人回复的开头显示模型名称。默认值为 `False`。对应于偏好设置里面的名为 `模型标题` 的按钮。 | 否 |
-<!-- | TYPING | 是否在机器人回复时显示“正在输入”状态。默认值为 `False`。 | 否 | -->
-| REPLY | 机器人是否应以“回复”格式回复用户的消息。默认值为 `False`。对应于偏好设置里面的名为 `回复消息` 的按钮。 | 否 |
+| REPLY | 机器人是否应以"回复"格式回复用户的消息。默认值为 `False`。对应于偏好设置里面的名为 `回复消息` 的按钮。 | 否 |
+<!-- | TYPING | 是否在机器人回复时显示"正在输入"状态。默认值为 `False`。 | 否 | -->
+
 
 以下是与机器人插件设置相关的环境变量列表：
 
 | 变量名称 | 描述 | 必需的？ |
 |---------------|-------------|-----------|
-| SEARCH | 是否启用搜索插件。默认值为 `True`。 | 否 |
-| URL | 是否启用URL摘要插件。默认值为 `True`。 | 否 |
-| ARXIV | 是否启用arXiv论文摘要插件。默认值为 `False`。 | 否 |
-| CODE | 是否启用代码解释器插件。默认值为 `False`。 | 否 |
-| IMAGE | 是否启用图像生成插件。默认值为 `False`。 | 否 |
-| DATE | 是否启用日期插件。默认值为 `False`。 | 否 |
+| get_search_results | 是否启用搜索插件。默认值为 `False`。 | 否 |
+| get_url_content | 是否启用URL摘要插件。默认值为 `False`。 | 否 |
+| download_read_arxiv_pdf | 是否启用arXiv论文摘要插件。默认值为 `False`。 | 否 |
+| run_python_script | 是否启用代码解释器插件。默认值为 `False`。 | 否 |
+| generate_image | 是否启用图像生成插件。默认值为 `False`。 | 否 |
+| get_time | 是否启用日期插件。默认值为 `False`。 | 否 |
 
 
 ## Koyeb 远程部署
@@ -104,15 +99,15 @@ ChatGPT Telegram 机器人是一个强大的 Telegram 机器人，可以使用�
 
 点击下面的按钮可以自动使用构建好的 docker 镜像一键部署：
 
-[![Deploy to Koyeb](https://www.koyeb.com/static/images/deploy/button.svg)](https://app.koyeb.com/deploy?type=docker&image=docker.io/yym68686/chatgpt:latest&name=chatbot)
+[![Deploy to Koyeb](https://www.koyeb.com/static/images/deploy/button.svg)](https://app.koyeb.com/deploy?name=chatgpt&type=docker&image=docker.io%2Fyym68686%2Fchatgpt%3Alatest&instance_type=free&regions=was&instances_min=0&autoscaling_sleep_idle_delay=300&env%5BAPI%5D=&env%5BBASE_URL%5D=&env%5BBOT_TOKEN%5D=&env%5BWEB_HOOK%5D=https%3A%2F%2F%7B%7B+KOYEB_PUBLIC_DOMAIN+%7D%7D%2F)
 
-⚠️ 注意：使用 Koyeb 部署时，必须添加环境变量 `WEB_HOOK`，否则机器人无法接收消息。使用类似 `https://appname.koyeb.app` 的字符串作为 `WEB_HOOK` 的值，Koyeb 会自动分配一个二级域名。
+在环境变量里面补全 BOT_TOKEN，API，BASE_URL 后直接点击部署按钮即可。WEB_HOOK 环境变量维持默认即可，不用修改，Koyeb 会自动分配一个二级域名。
 
 ### 仓库部署
 
 1. fork 本仓库 [点击 fork 本仓库](https://github.com/yym68686/ChatGPT-Telegram-Bot/fork)
 
-2. 部署时候需要选择以仓库的方式，`Run command` 设置为 `python3 bot.poy`，`Exposed ports` 设置为 `8080`。
+2. 部署时候需要选择以仓库的方式，`Run command` 设置为 `python3 bot.py`，`Exposed ports` 设置为 `8080`。
 
 3. [安装 pull](https://github.com/apps/pull) 自动同步本仓库。
 
@@ -139,10 +134,10 @@ ChatGPT Telegram 机器人是一个强大的 Telegram 机器人，可以使用�
 pip install -r requirements.txt > /dev/null && python3 bot.py
 ```
 
-在工具侧边栏中选择“Secrets”，添加机器人所需的环境变量，其中：
+在工具侧边栏中选择"Secrets"，添加机器人所需的环境变量，其中：
 
 - WEB_HOOK: Replit 会自动为您分配一个域名，填写 `https://appname.username.repl.co`
-- 记得打开“始终开启”
+- 记得打开"始终开启"
 
 点击屏幕顶部的运行按钮来运行机器人。
 
@@ -156,7 +151,7 @@ pip install -r requirements.txt > /dev/null && python3 bot.py
 flyctl launch --image yym68686/chatgpt:latest
 ```
 
-在提示时输入应用程序的名称，并选择“否”以初始化 Postgresql 或 Redis。
+在提示时输入应用程序的名称，并选择"否"以初始化 Postgresql 或 Redis。
 
 按照提示进行部署。官方控制面板将提供一个二级域名，可用于访问服务。
 
@@ -164,7 +159,7 @@ flyctl launch --image yym68686/chatgpt:latest
 
 ```bash
 flyctl secrets set BOT_TOKEN=bottoken
-flyctl secrets set API=
+flyctl secrets set API_KEY=
 # 可选
 flyctl secrets set WEB_HOOK=https://flyio-app-name.fly.dev/
 flyctl secrets set NICK=javis
@@ -203,8 +198,8 @@ https://api.telegram.org/bot<token>/getWebhookInfo
 ```bash
 docker run -p 80:8080 --name chatbot -dit \
     -e BOT_TOKEN=your_telegram_bot_token \
-    -e API= \
-    -e API_URL= \
+    -e API_KEY= \
+    -e BASE_URL= \
     -v ./user_configs:/home/user_configs \
     yym68686/chatgpt:latest
 ```
@@ -219,8 +214,8 @@ services:
     image: yym68686/chatgpt:latest
     environment:
       - BOT_TOKEN=
-      - API=
-      - API_URL=
+      - API_KEY=
+      - BASE_URL=
     volumes:
       - ./user_configs:/home/user_configs
     ports:
@@ -240,8 +235,7 @@ docker-compose -f docker-compose-uni-api.yml up -d
 将存储库中的Docker镜像打包并上传到Docker Hub
 
 ```bash
-docker build --no-cache -t chatgpt:latest -f Dockerfile.build --platform linux/amd64 .
-docker tag chatgpt:latest yym68686/chatgpt:latest
+docker buildx build --platform linux/amd64,linux/arm64 -t yym68686/chatgpt:latest -f Dockerfile.build --no-cache --push .
 docker push yym68686/chatgpt:latest
 ```
 
@@ -253,8 +247,8 @@ docker pull yym68686/chatgpt:latest
 docker rm -f chatbot
 docker run -p 8080:8080 -dit --name chatbot \
 -e BOT_TOKEN= \
--e API= \
--e API_URL= \
+-e API_KEY= \
+-e BASE_URL= \
 -e GOOGLE_API_KEY= \
 -e GOOGLE_CSE_ID= \
 -e claude_api_key= \
@@ -263,9 +257,11 @@ yym68686/chatgpt:latest
 docker logs -f chatbot
 ```
 
-该脚本用于通过单个命令重启Docker镜像。它首先删除名为“chatbot”的现有Docker容器（如果存在）。然后，它运行一个名为“chatbot”的新Docker容器，暴露端口8080并设置各种环境变量。使用的Docker镜像是“yym68686/chatgpt:latest”。最后，它跟踪“chatbot”容器的日志。
+该脚本用于通过单个命令重启Docker镜像。它首先删除名为"chatbot"的现有Docker容器（如果存在）。然后，它运行一个名为"chatbot"的新Docker容器，暴露端口8080并设置各种环境变量。使用的Docker镜像是"yym68686/chatgpt:latest"。最后，它跟踪"chatbot"容器的日志。
 
 ## 🚀 源代码本地部署
+
+python >= 3.10
 
 直接从源代码运行机器人而不使用docker，克隆仓库：
 
@@ -282,8 +278,7 @@ pip install -r requirements.txt
 设置环境变量：
 
 ```bash
-export BOT_TOKEN=
-export API=
+./configure_env.sh
 ```
 
 运行：
@@ -294,21 +289,17 @@ python bot.py
 
 ## 🧩 插件
 
-机器人支持多种插件，包括：DuckDuckGo 和 Google 搜索、URL 摘要、ArXiv 论文摘要、DALLE-3 画图和代码解释器等。您可以通过设置环境变量来启用或禁用这些插件。
+本项目支持多种插件，包括：DuckDuckGo 和 Google 搜索、URL 摘要、ArXiv 论文摘要、DALLE-3 画图和代码解释器等。您可以通过设置环境变量来启用或禁用这些插件。
 
 - 如何开发插件？
 
-插件相关的代码全部在本仓库git 子模块ModelMerge里面，ModelMerge是我开发的一个独立的仓库，用于处理API请求，对话历史记录管理等功能。当你使用git clone的--recurse-submodules参数克隆本仓库后，ModelMerge会自动下载到本地。插件所有的代码在本仓库中的相对路径为 `ModelMerge/src/ModelMerge/plugins`。你可以在这个目录下添加自己的插件代码。插件开发的流程如下：
+插件相关的代码全部在本仓库 git 子模块 aient 里面，aient 是我开发的一个独立的仓库，用于处理 API 请求，对话历史记录管理等功能。当你使用 git clone 的 --recurse-submodules 参数克隆本仓库后，aient 会自动下载到本地。插件所有的代码在本仓库中的相对路径为 `aient/src/aient/plugins`。你可以在这个目录下添加自己的插件代码。插件开发的流程如下：
 
-1. 在 `ModelMerge/src/ModelMerge/plugins` 目录下创建一个新的 Python 文件，例如 `myplugin.py`。在 `ModelMerge/src/ModelMerge/plugins/__init__.py` 文件中导入你的插件，例如 `from .myplugin import MyPlugin`。
+1. 在 `aient/src/aient/plugins` 目录下创建一个新的 Python 文件，例如 `myplugin.py`。通过在函数上面添加 `@register_tool()` 装饰器注册插件。`register_tool` 通过 `from .registry import register_tool` 导入。
 
-2. 在 `ModelMerge/src/ModelMerge/tools/chatgpt.py` 里面的 `function_call_list` 变量中添加你的插件OpenAI tool格式详细的请求体。Claude Gemini tool 不需要额外编写，你仅需要填写OpenAI格式的tool请求体，程序在请求Gemini或者Claude API的时候，会自动转换为Claude/Gemini tool格式。`function_call_list` 是一个字典，键是插件的名称，值是插件的请求体。请保证`function_call_list` 字典的键名保证唯一性，不能和已有的插件键名重复。
+4. utils/i18n.py 文件中添加插件名字各种语言的翻译。
 
-3. 在 `ModelMerge/src/ModelMerge/plugins/config.py` 里面的 `PLUGINS` 字典里面添加键值对，键是插件的名称，值是插件的环境变量及其默认值。这个默认值是插件的开关，如果默认值是`True`，那么插件默认是开启的，如果默认值是 `False`，那么插件默认是关闭的，需要在用户在 `/info` 命令里面手动开启。
-
-4. 最后，在 `ModelMerge/src/ModelMerge/plugins/config.py` 里面的函数 `get_tools_result_async` 和 `get_tools_result` 添加插件调用的代码，当机器人需要调用插件的时候，会调用这个函数。你需要在这个函数里面添加插件的调用代码。
-
-完成上面的步骤，你的插件就可以在机器人中使用了。🎉
+完成上面的步骤，你的插件就可以使用了。🎉
 
 ## 📄 常见问题
 
@@ -340,13 +331,32 @@ your_webhook_domain.com {
 
 3. 如果您使用了 OpenAI、Claude 和 Gemini 系列模型的 API，请确保你使用的是官方 API，如果你使用的是第三方中转 API，提供商可能通过网页逆向的方式向你提供 API，通过网页逆向的方式提供 API 无法使用 tools use，即不能使用本项目所有的插件。如果你确认你使用的是官方 API，仍然无法成功搜索，请联系开发人员。
 
-- 我如何切换模型？
+- 如何切换模型？
 
 您可以在聊天窗口中使用 "/info" 命令在 GPT3.5/4/4o 和其他模型之间切换。
 
-- 它可以在一个组中部署吗？
+- 如何将模型组织成组？
 
-是的，它支持白名单以防止滥用和信息泄露。
+你可以使用`CUSTOM_MODELS`环境变量，通过特殊语法来组织模型：
+1. 使用分号（`;`）分隔不同的组
+2. 使用冒号（`:`）定义组名及其包含的模型
+3. 组内的模型使用逗号（`,`）分隔
+
+例如：
+```
+CUSTOM_MODELS=-all;GPT:gpt-5,gpt-4,gpt-3.5-turbo;Claude:claude-3-opus,claude-3-sonnet,claude-3-haiku;Gemini:gemini-1.5-pro,gemini-1.0-pro;command,grok-2
+```
+
+这创建了三个组："GPT"、"Claude"和"Gemini"，每个组包含各自的模型。模型"command"和"grok-2"没有明确的组，所以它们会自动放入"OTHERS"组。
+
+如果想创建一个空的"OTHERS"组（即使没有未分组的模型），可以在最后添加"OTHERS"：
+```
+CUSTOM_MODELS=-all;GPT:gpt-5;Claude:claude-3-opus;OTHERS
+```
+
+- 它可以在一个群组中部署吗？
+
+是的，它支持群组白名单以防止滥用和信息泄露。
 
 - 为什么我把机器人添加到群组后它不能说话？
 
@@ -358,11 +368,11 @@ your_webhook_domain.com {
 
 - GROUP_LIST、ADMIN_LIST 和白名单的设置如何影响机器人的行为？
 
-如果未设置白名单，所有人都可以使用机器人。如果设置了白名单，只有白名单中的用户可以使用机器人。如果设置了GROUP_LIST，只有GROUP_LIST中的群组可以使用机器人。如果同时设置了白名单和GROUP_LIST，群组中的所有人都可以使用机器人，但只有白名单中的用户可以私聊机器人。如果设置了ADMIN_LIST，只有ADMIN_LIST中的用户可以使用/info命令来更改机器人的设置。如果未设置ADMIN_LIST，所有人都可以使用/info命令来更改机器人的配置。
+如果未设置白名单，所有人都可以使用机器人。如果设置了白名单，只有白名单中的用户可以使用机器人。如果设置了GROUP_LIST，只有GROUP_LIST中的群组可以使用机器人。如果同时设置了白名单和GROUP_LIST，群组中的所有人都可以使用机器人，但只有白名单中的用户可以私聊机器人。如果设置了ADMIN_LIST，只有ADMIN_LIST中的用户可以使用/info命令来更改机器人的设置。如果未设置ADMIN_LIST，所有人都可以使用/info命令来更改机器人的配置。GROUP_LIST 也可以包含频道，频道ID以减号开头，后跟一串数字。
 
-- 我应该如何设置 API_URL？
+- 我应该如何设置 BASE_URL？
 
-API_URL 支持所有后缀，包括：https://api.openai.com/v1/chat/completions、https://api.openai.com/v1 和 https://api.openai.com/。机器人将根据不同的用途自动分配不同的端点。
+BASE_URL 支持所有后缀，包括：https://api.openai.com/v1/chat/completions、https://api.openai.com/v1 和 https://api.openai.com/。机器人将根据不同的用途自动分配不同的端点。
 
 - 是否有必要配置 web_hook 环境变量？
 
@@ -386,11 +396,11 @@ web_hook 不是强制性的环境变量。你只需要设置域名（必须与 W
 
 - 历史会保留多少条消息？
 
-所有其他模型使用官方上下文长度设置，例如，`gpt-3.5-turbo-16k` 的上下文是 16k，`gpt-4o` 的上下文是 128k，`Claude3/3.5` 的上下文是 200k。此限制是为了节省用户成本，因为大多数场景不需要高上下文。
+所有其他模型使用官方上下文长度设置，例如，`gpt-3.5-turbo-16k` 的上下文是 16k，`gpt-5` 的上下文是 128k，`Claude3/3.5` 的上下文是 200k。此限制是为了节省用户成本，因为大多数场景不需要高上下文。
 
 - 如何从模型列表中删除默认模型名称？
 
-你可以使用 `CUSTOM_MODELS` 环境变量来完成它。例如，如果你想添加 gpt-4o 并从模型列表中移除 gpt-3.5 模型，请将 `CUSTOM_MODELS` 设置为 `gpt-4o,-gpt-3.5`。如果你想一次性删除所有默认模型，你可以将 `CUSTOM_MODELS` 设置为 `-all,gpt-4o`。
+你可以使用 `CUSTOM_MODELS` 环境变量来完成它。例如，如果你想添加 gpt-5 并从模型列表中移除 gpt-3.5 模型，请将 `CUSTOM_MODELS` 设置为 `gpt-5,-gpt-3.5`。如果你想一次性删除所有默认模型，你可以将 `CUSTOM_MODELS` 设置为 `-all,gpt-5`。
 
 - 对话隔离具体是如何工作的？
 
@@ -437,9 +447,11 @@ PASS_HISTORY的数量严格等于对话历史中的消息数量。推荐值是2�
 
 1. `/info`: 机器人 `/info` 命令可以查看机器人的配置信息，包括当前使用的模型、API URL、API 密钥等。它还可以更改机器人的显示语言、偏好设置和插件设置。
 
-2. `/start`：机器人 `/start` 命令可以查看机器人的使用说明、使用方法和功能介绍。您可以使用 `/start` 命令设置 API 密钥。如果您有官方的 OpenAI API 密钥，请使用以下命令：`/start your_api_key`。如果您使用的是第三方 API 密钥，请使用以下命令：`/start https://your_api_url your_api_key`。
+2. `/start`: 机器人 `/start` 命令可以查看机器人的使用说明、使用方法和功能介绍。您可以使用 `/start` 命令设置 API 密钥。如果您有官方的 OpenAI API 密钥，请使用以下命令：`/start your_api_key`。如果您使用的是第三方 API 密钥，请使用以下命令：`/start https://your_api_url your_api_key`。
 
-3. `/reset`：机器人 `/reset` 命令可以清除机器人的对话消息，并强制机器人停止生成回复。如果你想重置系统提示，请使用以下命令：`/reset your_system_prompt`。但是，`/reset` 命令永远不会恢复机器人的显示语言、偏好设置、插件设置、使用中的模型、API URL、API 密钥、系统提示等。
+3. `/reset`: 机器人 `/reset` 命令可以清除机器人的对话消息，并强制机器人停止生成回复。如果你想重置系统提示，请使用以下命令：`/reset your_system_prompt`。但是，`/reset` 命令永远不会恢复机器人的显示语言、偏好设置、插件设置、使用中的模型、API URL、API 密钥、系统提示等。
+
+4. `/model`: 机器人的 `/model` 命令允许你快速切换AI模型，无需通过 `/info` 菜单。只需使用 `/model model_name` 即可切换到特定模型。例如：`/model gpt-5` 切换到GPT-5或 `/model claude-3-opus` 切换到Claude 3 Opus。这个命令提供了在对话过程中更快捷的模型切换方式。
 
 - 如果 Koyeb 部署失败怎么办？
 
@@ -447,7 +459,17 @@ Koyeb 的免费服务可能有点不稳定，所以部署失败是很常见的�
 
 - 为什么我使用 CUSTOM_MODELS 删除默认模型名称后，再使用 /info 命令检查时它又重新出现了？
 
-如果你使用 `docker-compose.yml` 部署，不要在 `CUSTOM_MODELS` 的值周围添加引号。错误用法：`CUSTOM_MODELS="gpt-4o,-gpt-3.5"`，否则会导致环境变量解析错误，导致默认模型名称再次出现。错误的方式会被解析为删除 `gpt-3.5"` 模型，这将导致默认模型名称 `gpt-3.5` 未被删除。正确的写法是：`CUSTOM_MODELS=gpt-4o,-gpt-3.5`。
+如果你使用 `docker-compose.yml` 部署，不要在 `CUSTOM_MODELS` 的值周围添加引号。错误用法：`CUSTOM_MODELS="gpt-5,-gpt-3.5"`，否则会导致环境变量解析错误，导致默认模型名称再次出现。错误的方式会被解析为删除 `gpt-3.5"` 模型，这将导致默认模型名称 `gpt-3.5` 未被删除。正确的写法是：`CUSTOM_MODELS=gpt-5,-gpt-3.5`。
+
+对于模型组也是如此。错误写法：`CUSTOM_MODELS="GPT:gpt-5;Claude:claude-3-opus"`。正确写法：`CUSTOM_MODELS=GPT:gpt-5;Claude:claude-3-opus`。如果你的组名或模型名包含特殊字符，请注意正确转义。
+
+- 如何同时使用多个 API 提供商，例如同时使用 Gemini 和 OpenAI？
+
+本项目一次只能配置一个 API 提供商。例如，如果 `BASE_URL` 设置为 Gemini 的 API 地址，那么就无法同时使用 OpenAI 的 API。要同时使用多个提供商，您必须通过 `uni-api` 项目。`uni-api` 可以将各种不同提供商的 API 格式统一转换为 OpenAI 格式。本项目仅支持 OpenAI 格式的 API，因此通过 `uni-api` 进行转换后，您就可以在本项目中同时使用来自几十个不同提供商的模型。需要强调的是，“OpenAI 格式”并不意味着只能使用 OpenAI 的模型，许多其他提供商（如 Gemini、Groq、Cloudflare 等）也支持通过 OpenAI 兼容的格式来调用他们的 API。
+
+- 你为什么改变了 API 密钥的整个基础，现在我无法在不改变 API 的情况下同时使用 grok 和 gemini？
+
+开发者删除了除了OpenAI格式API之外的其他API，目前你想使用其他格式的API必须通过开发者的另外一个项目uni-api统一转换为OpenAI格式，你可以通过uni-api配置几十个不同的提供商在tg bot同时使用。这样做的目的是减少维护成本，开发者仅需要维护uni-api来适配所有最新的功能。当然gemini官方支持OpenAI格式的端点，例如：`https://generativelanguage.googleapis.com/v1/chat/completions`。
 
 ## 参考文献
 
@@ -466,10 +488,10 @@ duckduckgo AI: https://github.com/mrgick/duck_chat
 ## 赞助商
 
 我们感谢以下赞助商的支持：
-<!-- $300+$280+¥1200+¥300+$30+$25+$20+¥50 -->
+<!-- $300+$380+¥1200+¥300+$30+$25+$20+¥50 -->
 - @fasizhuanqian: 300 USDT
 
-- @ZETA: $280
+- @ZETA: $380
 
 - @yuerbujin: ¥1200
 

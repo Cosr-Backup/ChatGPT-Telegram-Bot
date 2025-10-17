@@ -53,7 +53,7 @@ import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 async def GetMesage(update_message, context, voice=True):
-    from ModelMerge.src.ModelMerge.utils.scripts import Document_extract
+    from aient.aient.utils.scripts import Document_extract
     image_url = None
     file_url = None
     reply_to_message_text = None
@@ -88,7 +88,7 @@ async def GetMesage(update_message, context, voice=True):
 
         if reply_to_message_file:
             reply_to_message_file_url = await get_file_url(reply_to_message_file, context)
-            reply_to_message_file_content = Document_extract(reply_to_message_file_url, reply_to_message_file_url, None)
+            reply_to_message_file_content = await Document_extract(reply_to_message_file_url, reply_to_message_file_url, None)
 
     if update_message.photo:
         photo = update_message.photo[-1]
